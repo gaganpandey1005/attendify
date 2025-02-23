@@ -1,0 +1,111 @@
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
+const SignIn = () =>
+{
+    const navigate=useNavigate();
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+
+    const [errors, setErrors] = useState({});
+
+    const handleChange = (e) =>
+    {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setErrors({ ...errors, [e.target.name]: "" }); // Clear errors on change
+    };
+
+    const handleSubmit = (e) =>
+    {
+        e.preventDefault();
+        let newErrors = {};
+
+        if (!formData.name) newErrors.name = "Name is required";
+        if (!formData.email) newErrors.email = "Email is required";
+        if (!formData.password) newErrors.password = "Password is required";
+
+        if (Object.keys(newErrors).length > 0)
+        {
+            setErrors(newErrors);
+            return;
+        }
+
+        alert("Form submitted successfully!");
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center justify-center border-2 bg-white shadow-lg mx-6 lg:mx-40 lg:my-[15%] my-[30%] p-8 rounded-xl"
+        >
+            <motion.h1
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-2xl font-semibold text-gray-700 mb-4"
+            >
+                Sign In
+            </motion.h1>
+
+            <motion.form
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="w-full flex flex-col gap-4"
+                onSubmit={handleSubmit}
+            >
+               
+
+                <div className="flex flex-col">
+                    <label className="text-gray-600 font-medium">E-mail</label>
+                    <motion.input
+                        whileFocus={{ scale: 1.05 }}
+                        className="border p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 transition-all outline-none"
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                </div>
+
+                <div className="flex flex-col">
+                    <label className="text-gray-600 font-medium">Password</label>
+                    <motion.input
+                        whileFocus={{ scale: 1.05 }}
+                        className="border p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 transition-all outline-none"
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                    {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                </div>
+
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-blue-500 text-white p-2 rounded-lg mt-4 shadow-md hover:bg-blue-600 transition-all"
+                    type="submit"
+                >
+                    Sign Up
+                </motion.button>
+                <div className="flex">
+
+                    <span>Create Account?</span>
+                    <span onClick={()=>navigate('/signup')} className= "cursor-pointer text-blue-600 ml-5">  Sign Up</span>
+                </div>
+            </motion.form>
+        </motion.div>
+    );
+};
+
+export default SignIn;
