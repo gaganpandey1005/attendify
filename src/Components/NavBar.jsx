@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () =>
 {
+    const navigate= useNavigate();
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -24,12 +26,14 @@ const Navbar = () =>
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                     className="hidden md:flex space-x-6"
+
                 >
                     {["Home", "About", "Sign Up"].map((item, index) => (
                         <motion.li
                             key={index}
                             whileHover={{ scale: 1.1 }}
                             className="text-gray-700 cursor-pointer hover:text-blue-500 transition-all"
+                            onClick={()=>item==="Sign Up"?navigate('/signup'):""}
                         >
                             {item}
                         </motion.li>
@@ -59,7 +63,13 @@ const Navbar = () =>
                             key={index}
                             whileHover={{ scale: 1.1 }}
                             className="text-gray-700 cursor-pointer hover:text-blue-500 transition-all"
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => {
+                                setIsOpen(false);
+                                if(item==="Sign Up"){
+                                    navigate('/signup')
+                                }
+                            }}
+                            
                         >
                             {item}
                         </motion.div>
