@@ -36,7 +36,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "https://attendify-backend-szi8.onrender.com",
+        "https://attendify-backend-szi8/api/register",
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
