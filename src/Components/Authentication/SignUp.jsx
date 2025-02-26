@@ -36,13 +36,14 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "https://attendify-backend-szi8.onrender.com/api/register",
+        "http://localhost:5000/api/register",
+
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
 
       console.log("Response:", response);
-      toast.success("Registration successful!", {
+      toast.success(response.data.message, {
         position: "top-center",
         autoClose: 3000,
       });
@@ -52,8 +53,8 @@ const SignUp = () => {
         "Error:",
         error.response ? error.response.data : "No response from server"
       );
-      toast.error("Registration failed! Please try again.", {
-        position: "top-right",
+      toast.error("Something went wrong", {
+        position: "top-center",
         autoClose: 3000,
       });
     }
@@ -141,7 +142,7 @@ const SignUp = () => {
           <span>Already have an account?</span>
           <span
             onClick={() => navigate("/signin")}
-            className="text-blue-600 ml-5 cursor-pointer"
+            className="text-blue-600 ml-2 cursor-pointer"
           >
             Sign In
           </span>
