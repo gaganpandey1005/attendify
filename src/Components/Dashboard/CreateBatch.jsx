@@ -1,20 +1,50 @@
+import axios from "axios";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function BatchForm({ onClose }) {
-  const [batch, setBatch] = useState(""); // Ensure it's initialized as an empty string
-  const [date, setDate] = useState("");
+  const [formData, setFormData] = useState({
+    batchName: "",
+    date: "",
+  });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ batch, date });
 
-    // Show success notification
-    toast.success("Batch Created Successfully!", { position: "top-center" });
+    const token = localStorage.getItem("token"); // Get JWT token
 
-    // Close the form after submission
-    onClose();
+    if (!token) {
+      toast.error("User is not authenticated. Please log in again.", {
+        position: "top-center",
+      });
+      return;
+    }
+
+    try {
+      await axios.post(
+        "https://attendify-backend-szi8.onrender.com/api/createBatch",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Send JWT in Authorization header
+          },
+        }
+      );
+
+      toast.success("Batch Created Successfully!", { position: "top-center" });
+      onClose();
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again later.";
+      toast.error(errorMessage, { position: "top-center", autoClose: 3000 });
+    }
   };
 
   return (
@@ -30,39 +60,42 @@ export default function BatchForm({ onClose }) {
           ✖
         </button>
 
-        {/* Batch Name */}
-        <div className="mb-3">
-          <label className="block font-semibold">Batch Name</label>
-          <input
-            type="text"
-            value={batch}
-            onChange={(e) => setBatch(e.target.value)}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-            placeholder="Enter Batch Name"
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          {/* Batch Name */}
+          <div className="mb-3">
+            <label className="block font-semibold">Batch Name</label>
+            <input
+              type="text"
+              name="batchName"
+              value={formData.batchName}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="Enter Batch Name"
+            />
+          </div>
 
-        {/* Date Input */}
-        <div className="mb-3">
-          <label className="block font-semibold">Date</label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
+          {/* Date Input */}
+          <div className="mb-3">
+            <label className="block font-semibold">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
+          >
+            Submit
+          </button>
+        </form>
       </div>
       <ToastContainer />
     </div>
