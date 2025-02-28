@@ -40,7 +40,7 @@ const SignIn = () => {
         }
       );
 
-      console.log("Form data:", formData);
+      
 
       // Handle response dynamically based on backend response
       toast.success(response.data.message || "Logged in successfully!", {
