@@ -12,7 +12,7 @@ const createBatch = async (req, res) => {
     }
 
     const token = authHeader.split(" ")[1]; // Extract token
-    const decoded = jwt.verify(token, process.env.SECRET_KEY); // Verify token
+    const decoded = jwt.verify(token, process.env.secret_key); // Verify token
     const teacherId = decoded.id; // Extract teacherId from JWT payload
 
     const { batchName, date } = req.body;
