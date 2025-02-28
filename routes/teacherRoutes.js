@@ -1,7 +1,13 @@
-    const express = require("express");
-    const router = express.Router();
-    const {registerTeacher} = require("../controller/registration");
+const express = require("express");
+const router = express.Router();
+const { registerTeacher } = require("../controller/registration");
 
-    router.post("/register", registerTeacher);
+const login = require("../controller/login");
+const verifyEmail = require("../controller/verifyEmail");
 
-    module.exports = router;
+router.post("/register", registerTeacher);
+router.post("/login", login);
+    
+router.get("/verification/:token", verifyEmail);
+
+module.exports = router;
