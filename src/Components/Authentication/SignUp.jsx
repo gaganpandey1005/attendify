@@ -41,6 +41,8 @@ const SignUp = () => {
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
+      console.log("formData",formData);
+      
 
       console.log("Response:", response);
       toast.success(response.data.message, {

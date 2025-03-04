@@ -1,20 +1,24 @@
-import React from 'react'
-import { useState } from 'react'
-import { IoMdAdd } from 'react-icons/io'
-import BatchForm from './CreateBatch.jsx'
-const DashBoardHeader = () => {
-  const [createBatch, setcreateBatch] = useState(false)
-  return (
-     <div className=" mt-19 ml-4 gap-8 flex">
-            <h1 className="bg-blue-600 w-auto rounded text-xl p-2 text-white">
-              Batches
-            </h1>
-            <button className="border-2 border-blue-600 w-auto rounded text-xl p-2 text-blue-600 text-2xl  flex" onClick={()=>setcreateBatch(true)}>
-              <IoMdAdd className='mt-1 mr-1' /> Create Batch
-            </button>
-            {createBatch && <BatchForm onClose={()=>{setcreateBatch(false)}}/>}
-          </div>
-  )
-}
+import React, { useState } from "react";
+import { IoMdAdd } from "react-icons/io";
+import BatchForm from "./CreateBatch.jsx";
 
-export default DashBoardHeader
+const DashBoardHeader = () => {
+  const [createBatch, setCreateBatch] = useState(false);
+
+  return (
+    <div className="mt-20 ml-4 flex  sm:flex-row gap-4 sm:gap-8 items-start sm:items-center">
+      <h1 className="bg-blue-600 w-auto rounded text-lg sm:text-xl p-2 text-white">
+        Batches
+      </h1>
+      <button
+        className="border-2 border-blue-600 w-auto rounded text-lg sm:text-xl p-2 text-blue-600 flex items-center"
+        onClick={() => setCreateBatch(true)}
+      >
+        <IoMdAdd className="mr-1" /> Create Batch
+      </button>
+      {createBatch && <BatchForm onClose={() => setCreateBatch(false)} />}
+    </div>
+  );
+};
+
+export default DashBoardHeader;

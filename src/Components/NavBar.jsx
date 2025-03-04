@@ -27,7 +27,7 @@ const Navbar = () => {
           transition={{ duration: 0.5 }}
           className="text-xl font-bold text-blue-600"
         >
-          MyApp
+          AttendiFy
         </motion.div>
 
         {/* Desktop Menu */}
