@@ -1,21 +1,32 @@
 import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import BatchForm from "./CreateBatch.jsx";
+import { useNavigate } from "react-router-dom";
 
 const DashBoardHeader = () => {
   const [createBatch, setCreateBatch] = useState(false);
-
+const navigate=useNavigate()
   return (
-    <div className="mt-20 ml-4 flex  sm:flex-row gap-4 sm:gap-8 items-start sm:items-center">
+    <div className="mt-20 ml-4 flex flex-wrap gap-4 sm:gap-8 items-start sm:items-center">
       <h1 className="bg-blue-600 w-auto rounded text-lg sm:text-xl p-2 text-white">
         Batches
       </h1>
+
       <button
         className="border-2 border-blue-600 w-auto rounded text-lg sm:text-xl p-2 text-blue-600 flex items-center"
         onClick={() => setCreateBatch(true)}
       >
         <IoMdAdd className="mr-1" /> Create Batch
       </button>
+
+      <button className="border-2 border-green-600 w-auto rounded text-lg sm:text-xl p-2 text-green-600 flex items-center" onClick={()=>navigate("/registerStudent")}>
+        Student Registration
+      </button>
+
+      <button className="border-2 border-red-600 w-auto rounded text-lg sm:text-xl p-2 text-red-600 flex items-center">
+        Fees Status
+      </button>
+
       {createBatch && <BatchForm onClose={() => setCreateBatch(false)} />}
     </div>
   );

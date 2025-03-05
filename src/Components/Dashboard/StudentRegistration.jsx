@@ -8,8 +8,8 @@ const StudentRegistrationTable = () => {
     name: "",
     contact: "",
     joiningDate: "",
+    batchName: "", // ✅ Changed batch → batchName
   });
-
 
   const [students, setStudents] = useState([]); // Store registered students
 
@@ -22,35 +22,46 @@ const StudentRegistrationTable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.contact || !formData.joiningDate) {
+    // Ensure fields are not empty
+    if (
+      !formData.name ||
+      !formData.contact ||
+      !formData.joiningDate ||
+      !formData.batchName
+    ) {
       toast.error("All fields are required!");
       return;
     }
-console.log("for",formData);
 
+    console.log("Sending Data:", formData); // Debugging
+    const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
         "http://localhost:5000/api/studentRegistration",
         formData,
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log("Form data", formData);
+      console.log("Form data received:", response.data);
 
-      // Update the students list with response data
+      // Update state
       setStudents([...students, response.data]);
 
       // Reset form fields
-      setFormData({ name: "", contact: "", joiningDate: "" });
+      setFormData({ name: "", contact: "", joiningDate: "", batchName: "" });
 
-      // Show success message
-      toast.success(`${response.data.name} registered successfully!`);
+      toast.success(`${response.data.student.name} registered successfully!`);
     } catch (error) {
       console.error(
         "Error:",
         error.response?.data || "No response from server"
       );
 
-      toast.error(error.response?.data?.message || "Backend not connected", {
+      toast.error(error.response?.data?.message || "No response", {
         position: "top-center",
         autoClose: 3000,
       });
@@ -72,6 +83,19 @@ console.log("for",formData);
             type="text"
             name="name"
             value={formData.name}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block font-medium">Batch Name:</label>{" "}
+          {/* ✅ Updated label */}
+          <input
+            type="text"
+            name="batchName" // ✅ Changed name="batch" → name="batchName"
+            value={formData.batchName}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
@@ -109,8 +133,6 @@ console.log("for",formData);
           Add Student
         </button>
       </form>
-
-    
     </div>
   );
 };
