@@ -61,11 +61,16 @@ const DashBoard = () => {
                   {new Date(batch.date).toLocaleDateString()}
                 </h1>
                 <h2 className="flex items-center text-gray-600 font-medium mt-1">
-                  <PiStudent className="mr-2 text-xl" /> Students: 0
+                  <PiStudent className="mr-2 text-xl" /> {batch.student.length}
                   {/* Replace 0 with actual student count */}
                 </h2>
                 <div className="flex flex-wrap gap-2 mt-4">
-                  <button className="bg-green-500 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto">
+                  <button
+                    className="bg-green-500 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto"
+                    onClick={() =>
+                      navigate(`/feeStatus?batchName=${batch.batchName}`)
+                    }
+                  >
                     Fee Status
                   </button>
                   <button
@@ -77,11 +82,10 @@ const DashBoard = () => {
                   <button
                     onClick={() =>
                       navigate(`/getStudent?batchName=${batch.batchName}`)
-
                     }
                     className="bg-blue-500 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto"
                   >
-                     View Student
+                    View Student
                   </button>
                 </div>
               </div>

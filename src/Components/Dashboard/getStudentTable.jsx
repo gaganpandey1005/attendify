@@ -53,7 +53,7 @@ const GetStudentTable = () => {
               <thead>
                 <tr className="bg-gray-200 text-center">
                   <th className="border-b p-2">Name</th>
-                  <th className="border-b p-2">Batch Name</th>
+                  
                   <th className="border-b p-2">Contact No.</th>
                   <th className="border-b p-2">Joining Date</th>
                 </tr>
@@ -62,7 +62,7 @@ const GetStudentTable = () => {
                 {students.map((student) => (
                   <tr key={student._id} className="text-center border-b">
                     <td className="p-2">{student.name}</td>
-                    <td className="p-2">{student.batchName}</td>
+                    
                     <td className="p-2">{student.contact}</td>
                     <td className="p-2">
                       {new Date(student.joiningDate).toLocaleDateString()}

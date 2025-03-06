@@ -8,6 +8,7 @@ import Dashboard from "./Components/Dashboard/DashBoard";
 import AttendanceForm from "./Components/Dashboard/AttendanceForm";
 import StudentRegistrationForm from "./Components/Dashboard/StudentRegistration";
 import GetStudentTable from "./Components/Dashboard/getStudentTable";
+import FeeStatus from "./Components/Dashboard/feeStatus";
 
 
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/Attendance" element={<AttendanceForm />} />
         <Route path="/registerStudent" element={<StudentRegistrationForm />} />
         <Route path="/getStudent" element={<GetStudentTable />} />
+        <Route path="/feeStatus" element={<FeeStatus/>}/>
 
         {/* <CreateSheet/> */}
       </Routes>
