@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FeeStatus = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
   const location = useLocation();
 
   // Extract batchName from URL query parameters
   const queryParams = new URLSearchParams(location.search);
   const batchName = queryParams.get("batchName") || "";
-  console.log(batchName);
-  
 
   useEffect(() => {
     const fetchFeeStatus = async () => {
@@ -29,6 +28,7 @@ const FeeStatus = () => {
         setError(
           error.response?.data?.message || "Failed to fetch fee status."
         );
+        toast.error("Failed to fetch fee status.");
       } finally {
         setLoading(false);
       }
@@ -37,36 +37,35 @@ const FeeStatus = () => {
     fetchFeeStatus();
   }, [batchName]);
 
-  // Function to toggle fee status
-  const toggleFeeStatus = async (studentId, currentStatus) => {
+  // Function to toggle fee status in backend
+  const updateFeeStatus = async (studentId) => {
     try {
-      setStudents((prevStudents) =>
-        prevStudents.map((student) =>
-          student._id === studentId
-            ? { ...student, paid: !currentStatus }
-            : student
-        )
+      const response = await axios.put(
+        "http://localhost:5000/api/getFeeStatus", // Correct API endpoint
+        { studentId }
       );
-      // Send update request to backend
-      
-      // Update state to reflect changes
-      setStudents((prevStudents) =>
-        prevStudents.map((student) =>
-          student._id === studentId
-            ? { ...student, paid: !currentStatus }
-            : student
-        )
-      );
+
+      if (response.status === 201) {
+        setStudents((prevStudents) =>
+          prevStudents.map((student) =>
+            student._id === studentId
+              ? { ...student, feePayStatus: response.data.feePayStatus }
+              : student
+          )
+        );
+
+        toast.success("Fee status updated successfully!");
+      }
     } catch (error) {
       console.error("Error updating fee status:", error);
-      alert("Failed to update fee status.");
+      toast.error("Failed to update fee status.");
     }
   };
 
   return (
     <div className="p-6 mt-10 text-center">
       <h2 className="text-2xl font-bold mb-6">Fee Status for {batchName}</h2>
-
+      <ToastContainer position="top-right" autoClose={3000} />
       {loading ? (
         <p className="text-gray-600">Loading fee status...</p>
       ) : error ? (
@@ -89,21 +88,17 @@ const FeeStatus = () => {
                   <td className="p-3">{student.contact}</td>
                   <td
                     className={`p-3 font-bold ${
-                      student.paid ? "text-green-600" : "text-red-600"
+                      student.feePayStatus ? "text-green-600" : "text-red-600"
                     }`}
                   >
-                    {student.paid ? "Paid" : "Unpaid"}
+                    {student.feePayStatus ? "Paid" : "Unpaid"}
                   </td>
                   <td className="p-3">
                     <button
-                      onClick={() => toggleFeeStatus(student._id, student.paid)}
-                      className={`px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 mt-1 rounded-lg text-white transition-all ${
-                        student.paid
-                          ? "bg-red-500 hover:bg-red-600"
-                          : "bg-green-500 hover:bg-green-600"
-                      } text-sm sm:text-base md:text-lg`}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                      onClick={() => updateFeeStatus(student._id)}
                     >
-                      {student.paid ? "Mark Unpaid" : "Mark Paid"}
+                      Update Fee Status
                     </button>
                   </td>
                 </tr>
