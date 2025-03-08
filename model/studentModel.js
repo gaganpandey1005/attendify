@@ -5,6 +5,7 @@ const studentSchema = new mongoose.Schema({
   contact: { type: String, required: true, unique: true, trim: true },
   joiningDate: { type: Date, required: true },
   feePayDate: { type: Date },
+  feePayStatus:{type:Boolean,default:false},
   batchName: { type: mongoose.Schema.Types.ObjectId, ref: "Batch" },
   teacher: { type: mongoose.Schema.Types.ObjectId, ref: "Teacher" },
 });

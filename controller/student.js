@@ -105,6 +105,29 @@ const getStudents = async (req, res) => {
     });
   }
 };
+const getFeeStatus = async (req, res) => {
+  const { studentId,feePayStatus } = req.body;
+  console.log(req.body);
+  
 
+  try {
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    student.feePayStatus = !student.feePayStatus;
+    student.save();
+    console.log(student);
+    
+    return res
+      .status(201)
+      .json({
+        message: "Student fee pay status updated",
+        feePayStatus: student.feePayStatus,
+      });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-module.exports = { studentRegistration, getStudents };
+module.exports = { getFeeStatus, studentRegistration, getStudents };

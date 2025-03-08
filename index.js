@@ -9,7 +9,7 @@ app.use(cors())
 require("dotenv").config();
 
 connectDb();
-
+    
 app.use(express.json());
 app.use("/api", teacherRoutes);
 app.use("/api", batchRoutes);
