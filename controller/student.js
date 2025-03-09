@@ -102,12 +102,12 @@ const getStudents = async (req, res) => {
     res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
-    });
+    }); 
   }
 };
 const getFeeStatus = async (req, res) => {
   const { studentId,feePayStatus } = req.body;
-  console.log(req.body);
+  
   
 
   try {
@@ -116,6 +116,7 @@ const getFeeStatus = async (req, res) => {
       return res.status(404).json({ message: "Student not found" });
     }
     student.feePayStatus = !student.feePayStatus;
+    student.feePayDate=Date.now();
     student.save();
     console.log(student);
     
@@ -129,5 +130,32 @@ const getFeeStatus = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+const getAttendanceStatus = async (req, res) => {
+  const { studentId,attendStatus } = req.body;
+  console.log("incoming",req.body);
+  
+  
 
-module.exports = { getFeeStatus, studentRegistration, getStudents };
+  try {
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    student.attendStatus = !student.attendStatus;
+    student.attendDate=Date.now();
+    student.save();
+    console.log(student);
+    
+    return res
+      .status(201)
+      .json({
+        message: "Student attendance status updated",
+        attendStatus: student.attendStatus,
+      });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+module.exports = { getAttendanceStatus, getFeeStatus, studentRegistration, getStudents };
