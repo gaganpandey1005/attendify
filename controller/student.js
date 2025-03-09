@@ -118,7 +118,7 @@ const getFeeStatus = async (req, res) => {
     student.feePayStatus = !student.feePayStatus;
     student.feePayDate=Date.now();
     student.save();
-    console.log(student);
+    
     
     return res
       .status(201)
