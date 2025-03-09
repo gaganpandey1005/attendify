@@ -10,7 +10,6 @@ const FeeStatus = () => {
   const [error, setError] = useState(null);
   const location = useLocation();
 
-  // Extract batchName from URL query parameters
   const queryParams = new URLSearchParams(location.search);
   const batchName = queryParams.get("batchName") || "";
 
@@ -37,12 +36,13 @@ const FeeStatus = () => {
     fetchFeeStatus();
   }, [batchName]);
 
-  // Function to toggle fee status in backend
   const updateFeeStatus = async (studentId) => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/getFeeStatus", // Correct API endpoint
-        { studentId }
+        "http://localhost:5000/api/getFeeStatus",
+        {
+          studentId,
+        }
       );
 
       if (response.status === 201) {
@@ -63,39 +63,41 @@ const FeeStatus = () => {
   };
 
   return (
-    <div className="p-6 mt-10 text-center">
-      <h2 className="text-2xl font-bold mb-6">Fee Status for {batchName}</h2>
+    <div className="p-4 sm:p-6 mt-6 text-center">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+        Fee Status for {batchName}
+      </h2>
       <ToastContainer position="top-right" autoClose={3000} />
       {loading ? (
         <p className="text-gray-600">Loading fee status...</p>
       ) : error ? (
         <p className="text-red-600">{error}</p>
       ) : students.length > 0 ? (
-        <div className="overflow-x-auto flex justify-center">
-          <table className="w-full max-w-5xl border-collapse border border-gray-300 shadow-lg rounded-lg">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-300 shadow-lg rounded-lg text-sm sm:text-base">
             <thead>
               <tr className="bg-gray-100 text-center">
-                <th className="border-b p-3">Name</th>
-                <th className="border-b p-3">Contact No.</th>
-                <th className="border-b p-3">Fee Status</th>
-                <th className="border-b p-3">Action</th>
+                <th className="border-b p-2 sm:p-3">Name</th>
+                <th className="border-b p-2 sm:p-3">Contact No.</th>
+                <th className="border-b p-2 sm:p-3">Fee Status</th>
+                <th className="border-b p-2 sm:p-3">Action</th>
               </tr>
             </thead>
             <tbody>
               {students.map((student) => (
                 <tr key={student._id} className="text-center border-b">
-                  <td className="p-3">{student.name}</td>
-                  <td className="p-3">{student.contact}</td>
+                  <td className="p-2 sm:p-3">{student.name}</td>
+                  <td className="p-2 sm:p-3">{student.contact}</td>
                   <td
-                    className={`p-3 font-bold ${
+                    className={`p-2 sm:p-3 font-bold ${
                       student.feePayStatus ? "text-green-600" : "text-red-600"
                     }`}
                   >
                     {student.feePayStatus ? "Paid" : "Unpaid"}
                   </td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                      className="bg-blue-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-md hover:bg-blue-700 text-xs sm:text-sm"
                       onClick={() => updateFeeStatus(student._id)}
                     >
                       Update Fee Status

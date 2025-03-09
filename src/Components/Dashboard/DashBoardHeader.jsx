@@ -23,9 +23,6 @@ const navigate=useNavigate()
         Student Registration
       </button>
 
-      <button className="border-2 border-red-600 w-auto rounded text-lg sm:text-xl p-2 text-red-600 flex items-center">
-        Fees Status
-      </button>
 
       {createBatch && <BatchForm onClose={() => setCreateBatch(false)} />}
     </div>

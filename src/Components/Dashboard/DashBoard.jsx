@@ -74,7 +74,7 @@ const DashBoard = () => {
                     Fee Status
                   </button>
                   <button
-                    onClick={() => navigate("/Attendance")}
+                    onClick={() => navigate(`/Attendance?batchName=${batch.batchName}`)}
                     className="bg-yellow-400 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto"
                   >
                     Take Attendance
