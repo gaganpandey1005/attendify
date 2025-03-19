@@ -21,7 +21,7 @@ const GetStudentTable = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/getStudents?batchName=${batchName}`
+          `https://attendify-backend-szi8.onrender.com/api/getStudents?batchName=${batchName}`
         );
         setStudents(response.data.students || response.data);
       } catch (error) {
