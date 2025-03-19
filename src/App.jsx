@@ -24,7 +24,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/Attendance" element={<AttendanceForm />} />
-        <Route path="/registerStudent" element={<StudentRegistrationForm />} />
+        <Route path="/registerStudent/:batchName" element={<StudentRegistrationForm />} />
         <Route path="/getStudent" element={<GetStudentTable />} />
         <Route path="/feeStatus" element={<FeeStatus/>}/>
 

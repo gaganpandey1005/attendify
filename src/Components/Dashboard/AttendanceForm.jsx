@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PlusCircle } from "lucide-react";
 
 const AttendanceStatus = () => {
+  const navigate=useNavigate();
   const [students, setStudents] = useState([]);
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,25 +30,22 @@ const AttendanceStatus = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://attendify-backend-szi8.onrender.com/api/getStudents?batchName=${batchName}`
+          `http://localhost:5000/api/getStudents?batchName=${batchName}`
         );
 
         const studentsData = response.data.students.map((student) => ({
           ...student,
-          attendance: student.attendance || {}, // Ensure attendance is an object
+          attendance: student.attendance || {},
         }));
 
-        // Extract all unique dates from attendance records
         const allDates = new Set();
         studentsData.forEach((student) => {
           Object.keys(student.attendance).forEach((date) => allDates.add(date));
         });
-
-        // Ensure the current date is included
         allDates.add(getCurrentDate());
 
         setStudents(studentsData);
-        setDates([...allDates].sort()); // Sort dates chronologically
+        setDates([...allDates].sort());
       } catch (error) {
         console.error("Error fetching attendance status:", error);
         setError(
@@ -63,7 +63,7 @@ const AttendanceStatus = () => {
   const updateAttendanceStatus = async (studentId, date) => {
     try {
       const response = await axios.put(
-        "https://attendify-backend-szi8.onrender.com/api/attendanceStatus",
+        "http://localhost:5000/api/attendanceStatus",
         { studentId, date }
       );
 
@@ -88,26 +88,53 @@ const AttendanceStatus = () => {
     }
   };
 
+  const saveAttendance = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/saveAttendance", {
+        students,
+      });
+      toast.success("Attendance saved successfully!");
+    } catch (error) {
+      console.error("Error saving attendance:", error);
+      toast.error("Failed to save attendance.");
+    }
+  };
+
+  // const addStudent = () => {
+  //   try{
+
+  //   }
+  // };
+
   return (
-    <div className="p-4 md:p-6 mt-10 text-center">
-      <h2 className="text-xl md:text-2xl font-bold mb-4">
-        Attendance Status for {batchName}
-      </h2>
+    <div className="p-4 md:p-6 mt-15 text-center">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl md:text-2xl font-bold">
+          Attendance Status for {batchName}
+        </h2>
+        <button
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+          onClick={()=>{navigate(`/registerStudent/${batchName}`)}}
+        >
+          <PlusCircle className="w-6 h-6" />
+          Add Student
+        </button>
+      </div>
       <ToastContainer position="top-right" autoClose={3000} />
 
       {loading ? (
         <p className="text-gray-600">Loading attendance status...</p>
       ) : error ? (
         <p className="text-red-600">{error}</p>
-      ) : students.length > 0 ? (
+      ) : (
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px] border-collapse border border-gray-300 shadow-lg rounded-lg">
             <thead>
               <tr className="bg-gray-100 text-center">
-                <th className="border-b p-3 whitespace-nowrap">Name</th>
-                <th className="border-b p-3 whitespace-nowrap">Contact No.</th>
+                <th className="border-b p-2">Name</th>
+                <th className="border-b p-2">Contact No.</th>
                 {dates.map((date) => (
-                  <th key={date} className="border-b p-3 whitespace-nowrap">
+                  <th key={date} className="border-b p-2">
                     {date}
                   </th>
                 ))}
@@ -116,10 +143,10 @@ const AttendanceStatus = () => {
             <tbody>
               {students.map((student) => (
                 <tr key={student._id} className="text-center border-b">
-                  <td className="p-3">{student.name}</td>
-                  <td className="p-3">{student.contact}</td>
+                  <td className="p-2">{student.name}</td>
+                  <td className="p-2">{student.contact}</td>
                   {dates.map((date) => (
-                    <td key={date} className="p-3">
+                    <td key={date} className="p-2">
                       <span
                         className={`font-bold ${
                           student.attendance[date]
@@ -145,9 +172,13 @@ const AttendanceStatus = () => {
               ))}
             </tbody>
           </table>
+          <button
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-800"
+            onClick={saveAttendance}
+          >
+            Save Attendance
+          </button>
         </div>
-      ) : (
-        <p className="text-gray-600">No students registered in this batch.</p>
       )}
     </div>
   );

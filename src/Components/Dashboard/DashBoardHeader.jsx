@@ -19,9 +19,7 @@ const navigate=useNavigate()
         <IoMdAdd className="mr-1" /> Create Batch
       </button>
 
-      <button className="border-2 border-green-600 w-auto rounded text-lg sm:text-xl p-2 text-green-600 flex items-center" onClick={()=>navigate("/registerStudent")}>
-        Student Registration
-      </button>
+      
 
 
       {createBatch && <BatchForm onClose={() => setCreateBatch(false)} />}

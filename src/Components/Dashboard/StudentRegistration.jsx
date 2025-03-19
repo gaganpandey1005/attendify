@@ -1,14 +1,16 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { useParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 const StudentRegistrationTable = () => {
+  const { batchName } = useParams(); // Get batch name from URL params
   const [formData, setFormData] = useState({
     name: "",
     contact: "",
-    joiningDate: "",
-    batchName: "", // ✅ Changed batch → batchName
+    joiningDate: new Date().toISOString().split("T")[0], // Current date
+    batchName,
   });
 
   const [students, setStudents] = useState([]); // Store registered students
@@ -23,13 +25,8 @@ const StudentRegistrationTable = () => {
     e.preventDefault();
 
     // Ensure fields are not empty
-    if (
-      !formData.name ||
-      !formData.contact ||
-      !formData.joiningDate ||
-      !formData.batchName
-    ) {
-      toast.error("All fields are required!");
+    if (!formData.name || !formData.contact) {
+      toast.error("Name and contact are required!");
       return;
     }
 
@@ -37,7 +34,7 @@ const StudentRegistrationTable = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        "https://attendify-backend-szi8.onrender.com/api/studentRegistration",
+        `https://attendify-backend-szi8.onrender.com/api/studentRegistration`,
         formData,
         {
           headers: {
@@ -52,7 +49,11 @@ const StudentRegistrationTable = () => {
       setStudents([...students, response.data]);
 
       // Reset form fields
-      setFormData({ name: "", contact: "", joiningDate: "", batchName: "" });
+      setFormData({
+        name: "",
+        contact: "",
+        joiningDate: new Date().toISOString().split("T")[0],
+      });
 
       toast.success(`${response.data.student.name} registered successfully!`);
     } catch (error) {
@@ -72,7 +73,7 @@ const StudentRegistrationTable = () => {
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <ToastContainer />
       <h2 className="text-2xl font-bold text-center mb-4">
-        Student Registration
+        Student Registration for Batch: {batchName}
       </h2>
 
       {/* Registration Form */}
@@ -90,36 +91,11 @@ const StudentRegistrationTable = () => {
         </div>
 
         <div>
-          <label className="block font-medium">Batch Name:</label>{" "}
-          {/* ✅ Updated label */}
-          <input
-            type="text"
-            name="batchName" // ✅ Changed name="batch" → name="batchName"
-            value={formData.batchName}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div>
           <label className="block font-medium">Contact No.:</label>
           <input
             type="text"
             name="contact"
             value={formData.contact}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Joining Date:</label>
-          <input
-            type="date"
-            name="joiningDate"
-            value={formData.joiningDate}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
