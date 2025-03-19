@@ -27,11 +27,7 @@ const studentRegistration = async (req, res) => {
       return res.status(400).json({ message: "All information required" });
     }
 
-    // ✅ Check if student already exists
-    const existingStudent = await Student.findOne({ contact });
-    if (existingStudent) {
-      return res.status(400).json({ message: "Student already exists" });
-    }
+    
 
     // ✅ Find the batch
     const batch = await Batch.findOne({ batchName });
