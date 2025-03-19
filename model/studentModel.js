@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
-  contact: { type: String, required: true, unique: true, trim: true },
+  contact: { type: String, required: true, trim: true },
   joiningDate: { type: Date, required: true },
   feePayDate: { type: Date },
   feePayStatus:{type:Boolean,default:false},
