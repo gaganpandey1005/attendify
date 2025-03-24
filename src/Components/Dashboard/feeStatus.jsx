@@ -63,7 +63,7 @@ const FeeStatus = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 mt-6 text-center">
+    <div className="p-4 sm:p-6 mt-12 text-center">
       <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
         Fee Status for {batchName}
       </h2>

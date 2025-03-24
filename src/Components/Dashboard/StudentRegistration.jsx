@@ -6,18 +6,25 @@ import "react-toastify/dist/ReactToastify.css";
 
 const StudentRegistrationTable = () => {
   const { batchName } = useParams(); // Get batch name from URL params
+  const batch=batchName;
   const [formData, setFormData] = useState({
     name: "",
     contact: "",
     joiningDate: new Date().toISOString().split("T")[0], // Current date
-    batchName,
+    batchName:batch
   });
+  
+  
 
   const [students, setStudents] = useState([]); // Store registered students
 
   // Handle input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+      batchName: batch, // Keep the batch name intact
+    }));
   };
 
   // Handle form submission
@@ -29,6 +36,8 @@ const StudentRegistrationTable = () => {
       toast.error("Name and contact are required!");
       return;
     }
+    // Add batchName to formData before sending
+    const studentData = { ...formData, batchName: batch };
 
     console.log("Sending Data:", formData); // Debugging
     const token = localStorage.getItem("token");
@@ -36,6 +45,7 @@ const StudentRegistrationTable = () => {
       const response = await axios.post(
         `https://attendify-backend-szi8.onrender.com/api/studentRegistration`,
         formData,
+
         {
           headers: {
             "Content-Type": "application/json",
@@ -53,6 +63,7 @@ const StudentRegistrationTable = () => {
         name: "",
         contact: "",
         joiningDate: new Date().toISOString().split("T")[0],
+        batchName: batch,
       });
 
       toast.success(`${response.data.student.name} registered successfully!`);

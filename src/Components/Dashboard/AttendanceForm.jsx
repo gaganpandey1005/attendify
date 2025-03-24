@@ -7,18 +7,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { PlusCircle } from "lucide-react";
 
 const AttendanceStatus = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
 
-  // Extract batchName from URL query parameters
   const queryParams = new URLSearchParams(location.search);
   const batchName = queryParams.get("batchName") || "";
 
-  // Get current date in YYYY-MM-DD format
   const getCurrentDate = () => {
     const today = new Date();
     return today.toISOString().split("T")[0];
@@ -103,23 +101,17 @@ const AttendanceStatus = () => {
     }
   };
 
-  // const addStudent = () => {
-  //   try{
-
-  //   }
-  // };
-
   return (
-    <div className="p-4 md:p-6 mt-15 text-center">
+    <div className="p-4 md:p-6 mt-13 text-center">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl md:text-2xl font-bold">
+        <h2 className="text-lg md:text-2xl font-bold">
           Attendance Status for {batchName}
         </h2>
         <button
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
-          onClick={()=>{navigate(`/registerStudent/${batchName}`)}}
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm md:text-base"
+          onClick={() => navigate(`/registerStudent/${batchName}`)}
         >
-          <PlusCircle className="w-6 h-6" />
+          <PlusCircle className="w-5 h-5 md:w-6 md:h-6" />
           Add Student
         </button>
       </div>
@@ -131,13 +123,13 @@ const AttendanceStatus = () => {
         <p className="text-red-600">{error}</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] border-collapse border border-gray-300 shadow-lg rounded-lg">
+          <table className="w-full min-w-[600px] border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-100 text-center">
-                <th className="border-b p-2">Name</th>
-                <th className="border-b p-2">Contact No.</th>
+              <tr className="bg-gray-100">
+                <th className="p-2">Name</th>
+                <th className="p-2">Contact No.</th>
                 {dates.map((date) => (
-                  <th key={date} className="border-b p-2">
+                  <th key={date} className="p-2">
                     {date}
                   </th>
                 ))}
@@ -146,22 +138,22 @@ const AttendanceStatus = () => {
             <tbody>
               {students.map((student) => (
                 <tr key={student._id} className="text-center border-b">
-                  <td className="p-2">{student.name}</td>
-                  <td className="p-2">{student.contact}</td>
+                  <td className="p-2 text-sm">{student.name}</td>
+                  <td className="p-2 text-sm">{student.contact}</td>
                   {dates.map((date) => (
-                    <td key={date} className="p-2">
+                    <td key={date} className="p-2 text-sm">
                       <span
-                        className={`font-bold ${
+                        className={
                           student.attendance[date]
                             ? "text-green-600"
                             : "text-red-600"
-                        }`}
+                        }
                       >
                         {student.attendance[date] ? "Present" : "Absent"}
                       </span>
                       {date === getCurrentDate() && (
                         <button
-                          className="ml-2 bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 text-sm"
+                          className="ml-2 mt-1 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700 text-xs md:text-sm"
                           onClick={() =>
                             updateAttendanceStatus(student._id, date)
                           }
@@ -176,7 +168,7 @@ const AttendanceStatus = () => {
             </tbody>
           </table>
           <button
-            className="mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-800"
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
             onClick={saveAttendance}
           >
             Save Attendance

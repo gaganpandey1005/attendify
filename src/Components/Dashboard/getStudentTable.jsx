@@ -12,11 +12,8 @@ const GetStudentTable = () => {
   const queryParams = new URLSearchParams(location.search);
   const batchName = queryParams.get("batchName") || "";
 
-
   useEffect(() => {
     const fetchStudents = async () => {
-      
-      
       if (!batchName) return; // Don't fetch if batchName is empty
       setLoading(true);
       try {
@@ -24,6 +21,7 @@ const GetStudentTable = () => {
           `https://attendify-backend-szi8.onrender.com/api/getStudents?batchName=${batchName}`
         );
         setStudents(response.data.students || response.data);
+        console.log(response);
       } catch (error) {
         console.error("Error fetching students:", error);
         setError(
@@ -53,19 +51,27 @@ const GetStudentTable = () => {
               <thead>
                 <tr className="bg-gray-200 text-center">
                   <th className="border-b p-2">Name</th>
-                  
+
                   <th className="border-b p-2">Contact No.</th>
                   <th className="border-b p-2">Joining Date</th>
+
+                  <th className="border-b p-2">Fee Pay Date</th>
                 </tr>
               </thead>
               <tbody>
                 {students.map((student) => (
                   <tr key={student._id} className="text-center border-b">
                     <td className="p-2">{student.name}</td>
-                    
+
                     <td className="p-2">{student.contact}</td>
                     <td className="p-2">
                       {new Date(student.joiningDate).toLocaleDateString()}
+                    </td>
+
+                    <td className="p-2">
+                      {student.feePayDate
+                        ? new Date(student.feePayDate).toLocaleDateString()
+                        : "Not Paid"}
                     </td>
                   </tr>
                 ))}
