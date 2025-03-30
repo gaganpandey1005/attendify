@@ -20,7 +20,7 @@ const studentRegistration = async (req, res) => {
       return res.status(400).json({ message: "No Teacher exists" });
     }
 
-    console.log("Incoming data", req.body);
+    // console.log("Incoming data", req.body);
 
     // ✅ Validate required fields
     if (!name || !joiningDate || !contact || !batchName) {
@@ -121,7 +121,7 @@ const getFeeStatus = async (req, res) => {
 
 const getAttendanceStatus = async (req, res) => {
   const { studentId, date } = req.body;
-  console.log("Incoming request:", req.body);
+  // console.log("Incoming request:", req.body);
 
   try {
     const student = await Student.findById(studentId);
@@ -136,7 +136,7 @@ const getAttendanceStatus = async (req, res) => {
 
     await student.save();
 
-    console.log("Updated student:", student);
+    // console.log("Updated student:", student);
 
     return res.status(201).json({
       message: "Student attendance status updated",
@@ -152,7 +152,7 @@ const getAttendanceStatus = async (req, res) => {
 const saveAttendance = async (req, res) => {
   try {
     const { students } = req.body;
-console.log(students);
+// console.log(students);
 
     if (!students || !Array.isArray(students) || students.length === 0) {
       return res.status(400).json({ message: "Invalid attendance data" });
@@ -189,10 +189,12 @@ const saveFeeStatus = async (req, res) => {
       if (!existingStudent) {
         continue;
       }
-      console.log(student.feePayDate,student.feePayStatus);
+      // console.log("student",students);
+      
       
 
       existingStudent.feePayStatus = student.feePayStatus;
+      existingStudent.feePayDate=student.feePayDate;
       await existingStudent.save();
     }
 
