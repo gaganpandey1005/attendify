@@ -9,16 +9,11 @@ const TeacherNameCards = ({ teachers }) => {
 
   const handleClick = async (email) => {
     try {
-      
       const res = await axios.get(
-        `http://localhost:5000/api/getTeacherBatches/${email}`
+        `https://attendify-backend-szi8.onrender.com/api/getTeacherBatches/${email}`
       );
-      
-      
 
-      
-      navigate("/getTeacherBatches",{state:{email}});
-      
+      navigate("/getTeacherBatches", { state: { email } });
     } catch (error) {
       console.error("Error fetching batches:", error);
     }
