@@ -134,7 +134,9 @@ const GetStudentTable = () => {
             <table className="min-w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-200 text-center">
-                  <th className="border-b p-2">Name</th>
+                  <th className="border-b p-2 sticky left-0 bg-gray-200 z-10">
+                    Name
+                  </th>
                   <th className="border-b p-2">Contact No.</th>
                   <th className="border-b p-2">Joining Date</th>
                   <th className="border-b p-2">Fee Pay Date</th>
@@ -147,10 +149,12 @@ const GetStudentTable = () => {
                     ))}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="overflow-auto">
                 {students.map((student) => (
                   <tr key={student._id} className="text-center border-b">
-                    <td className="p-2">{student.name}</td>
+                    <td className="p-2 sticky left-0 bg-white z-10">
+                      {student.name}
+                    </td>
                     <td className="p-2">{student.contact}</td>
                     <td className="p-2">
                       {new Date(student.joiningDate).toLocaleDateString()}
