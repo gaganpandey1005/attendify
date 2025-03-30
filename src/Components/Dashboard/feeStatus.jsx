@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Key } from "lucide-react";
 
 const FeeStatus = () => {
   const [students, setStudents] = useState([]);
@@ -39,7 +40,7 @@ const FeeStatus = () => {
   const updateFeeStatus = async (studentId) => {
     try {
       const response = await axios.put(
-        "https://attendify-backend-szi8.onrender.com/api/getFeeStatus",
+        "http://localhost:5000/api/getFeeStatus",
         {
           studentId,
         }
@@ -64,18 +65,27 @@ const FeeStatus = () => {
 
   const saveFeeStatus = async () => {
     try {
+      const date=new Date();
+      
       await axios.post(
         "https://attendify-backend-szi8.onrender.com/api/saveFeePayStatus",
         {
-          students,
+          students: students.map((student) => ({
+            _id: student._id,
+            feePayStatus: student.feePayStatus,
+            feePayDate: date, // Ensure date is sent
+          })),
         }
       );
+      console.log(students);
+      
       toast.success("Fee status saved successfully!");
     } catch (error) {
       console.error("Error saving fee status:", error);
       toast.error("Failed to save fee status.");
     }
   };
+
 
   return (
     <div className="p-4 sm:p-6 mt-12 text-center">

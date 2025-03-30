@@ -156,7 +156,7 @@ const GetStudentTable = () => {
                       {new Date(student.joiningDate).toLocaleDateString()}
                     </td>
                     <td className="p-2">
-                      {student.feePayDate
+                      {student.feePayStatus
                         ? new Date(student.feePayDate).toLocaleDateString()
                         : "Not Paid"}
                     </td>
