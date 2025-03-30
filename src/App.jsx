@@ -9,7 +9,8 @@ import AttendanceForm from "./Components/Dashboard/AttendanceForm";
 import StudentRegistrationForm from "./Components/Dashboard/StudentRegistration";
 import GetStudentTable from "./Components/Dashboard/getStudentTable";
 import FeeStatus from "./Components/Dashboard/feeStatus";
-
+import AdminDashBoard from "./Components/Dashboard/adminDashboard";
+import BatchCard from "./Components/Dashboard/adminBatchCard";
 
 
 function App() {
@@ -24,11 +25,15 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/Attendance" element={<AttendanceForm />} />
-        <Route path="/registerStudent/:batchName" element={<StudentRegistrationForm />} />
+        <Route
+          path="/registerStudent/:batchName"
+          element={<StudentRegistrationForm />}
+        />
         <Route path="/getStudent" element={<GetStudentTable />} />
-        <Route path="/feeStatus" element={<FeeStatus/>}/>
-
-        {/* <CreateSheet/> */}
+        <Route path="/feeStatus" element={<FeeStatus />} />
+        <Route path="/admin" element={<AdminDashBoard />} />
+        <Route path="/getTeacherBatches" element={<BatchCard />} />
+        
       </Routes>
     </>
   );

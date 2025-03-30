@@ -5,6 +5,6 @@ export const isAdminRestricted = () => {
     alert("Admin is not allowed to perform this action.");
     return true; // Return true to indicate restriction
   }
-
+  
   return false; // No restriction
 };

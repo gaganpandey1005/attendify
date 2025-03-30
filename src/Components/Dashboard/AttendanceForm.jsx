@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PlusCircle } from "lucide-react";
+import { isAdminRestricted } from "../../helper";
 
 const AttendanceStatus = () => {
   const navigate = useNavigate();
@@ -60,6 +61,7 @@ const AttendanceStatus = () => {
 
   const updateAttendanceStatus = async (studentId, date) => {
     try {
+      if(isAdminRestricted())return;
       const response = await axios.put(
         "https://attendify-backend-szi8.onrender.com/api/attendanceStatus",
         { studentId, date }
@@ -87,6 +89,7 @@ const AttendanceStatus = () => {
   };
 
   const saveAttendance = async () => {
+    if(isAdminRestricted())return;
     try {
       await axios.post(
         "https://attendify-backend-szi8.onrender.com/api/saveAttendance",

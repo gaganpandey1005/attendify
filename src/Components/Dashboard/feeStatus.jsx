@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Key } from "lucide-react";
+import { isAdminRestricted } from "../../helper";
 
 const FeeStatus = () => {
   const [students, setStudents] = useState([]);
@@ -38,6 +39,7 @@ const FeeStatus = () => {
   }, [batchName]);
 
   const updateFeeStatus = async (studentId) => {
+    if(isAdminRestricted()) return;
     try {
       const response = await axios.put(
         "https://attendify-backend-szi8.onrender.com/api/getFeeStatus",
@@ -64,6 +66,7 @@ const FeeStatus = () => {
   };
 
   const saveFeeStatus = async () => {
+    if(isAdminRestricted())return 
     try {
       const date=new Date();
       

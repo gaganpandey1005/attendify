@@ -3,13 +3,18 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import react-toastify
+import { isAdminRestricted } from "../../helper";
 
 const SignIn = () => {
+
   const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  
+  
 
   const [errors, setErrors] = useState({});
 
@@ -50,7 +55,17 @@ const SignIn = () => {
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
       }
+      localStorage.setItem("userEmail",formData.email);
+      
+      if (
+        formData.email === "admin@gmail.com" &&
+        formData.password === "1234"
+      ) {
+        navigate("/admin");
+        localStorage.setItem("userEmail", formData.email);
 
+        return;
+      }
       // Redirect after successful login
       navigate("/dashboard");
     } catch (error) {
