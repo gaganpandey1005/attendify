@@ -41,7 +41,7 @@ const StudentRegistrationTable = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/studentRegistration`,
+        `https://attendify-backend-szi8.onrender.com/api/studentRegistration`,
         formData,
 
         {

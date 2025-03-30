@@ -26,12 +26,16 @@ export default function BatchForm({ onClose }) {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/createBatch", formData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ Send JWT in Authorization header
-        },
-      });
+      await axios.post(
+        "https://attendify-backend-szi8.onrender.com/api/createBatch",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Send JWT in Authorization header
+          },
+        }
+      );
 
       toast.success("Batch Created Successfully!", { position: "top-center" });
       onClose();

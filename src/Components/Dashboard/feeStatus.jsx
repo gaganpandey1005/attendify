@@ -19,7 +19,7 @@ const FeeStatus = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/getStudents?batchName=${batchName}`
+          `https://attendify-backend-szi8.onrender.com/api/getStudents?batchName=${batchName}`
         );
         setStudents(response.data.students || []);
       } catch (error) {
@@ -39,7 +39,7 @@ const FeeStatus = () => {
   const updateFeeStatus = async (studentId) => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/getFeeStatus",
+        "https://attendify-backend-szi8.onrender.com/api/getFeeStatus",
         {
           studentId,
         }
@@ -64,9 +64,12 @@ const FeeStatus = () => {
 
   const saveFeeStatus = async () => {
     try {
-      await axios.post("http://localhost:5000/api/saveFeePayStatus", {
-        students,
-      });
+      await axios.post(
+        "https://attendify-backend-szi8.onrender.com/api/saveFeePayStatus",
+        {
+          students,
+        }
+      );
       toast.success("Fee status saved successfully!");
     } catch (error) {
       console.error("Error saving fee status:", error);

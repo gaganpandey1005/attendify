@@ -20,7 +20,7 @@ const GetStudentTable = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/getStudents?batchName=${batchName}`
+          `https://attendify-backend-szi8.onrender.com/api/getStudents?batchName=${batchName}`
         );
         setStudents(response.data.students || response.data);
 
@@ -88,7 +88,6 @@ const GetStudentTable = () => {
 
     XLSX.writeFile(workbook, `Students_${batchName}.xlsx`); // Save and download
   };
-
 
   return (
     <div className="p-4 mt-10 text-center">

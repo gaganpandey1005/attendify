@@ -21,11 +21,14 @@ const DashBoard = () => {
           return;
         }
 
-        const res = await axios.get("http://localhost:5000/api/getBatch", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          "https://attendify-backend-szi8.onrender.com/api/getBatch",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         setBatches(res.data.batches);
       } catch (error) {
