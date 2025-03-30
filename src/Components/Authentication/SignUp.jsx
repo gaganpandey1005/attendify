@@ -36,7 +36,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "https://attendify-backend-szi8.onrender.com/api/register",
+        "http://localhost:5000/api/register",
 
         formData,
         { headers: { "Content-Type": "application/json" } }
@@ -116,8 +116,8 @@ const SignUp = () => {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-gray-600 font-medium">Password</label>
-          <motion.input
+          <label  className="text-gray-600 font-medium">Password</label>
+          <motion.input placeholder="Password should be of 4 character only"
             whileFocus={{ scale: 1.05 }}
             className="border p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 transition-all outline-none"
             type="password"

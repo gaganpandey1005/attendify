@@ -40,7 +40,7 @@ const FeeStatus = () => {
   const updateFeeStatus = async (studentId) => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/getFeeStatus",
+        "https://attendify-backend-szi8.onrender.com/api/getFeeStatus",
         {
           studentId,
         }
