@@ -152,6 +152,7 @@ const getAttendanceStatus = async (req, res) => {
 const saveAttendance = async (req, res) => {
   try {
     const { students } = req.body;
+console.log(students);
 
     if (!students || !Array.isArray(students) || students.length === 0) {
       return res.status(400).json({ message: "Invalid attendance data" });
@@ -175,6 +176,34 @@ const saveAttendance = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+const saveFeeStatus = async (req, res) => {
+  try {
+    const { students } = req.body;
+
+    if (!students || !Array.isArray(students) || students.length === 0) {
+      return res.status(400).json({ message: "Invalid attendance data" });
+    }
+
+    for (const student of students) {
+      const existingStudent = await Student.findById(student._id);
+      if (!existingStudent) {
+        continue;
+      }
+      console.log(student.feePayDate,student.feePayStatus);
+      
+
+      existingStudent.feePayStatus = student.feePayStatus;
+      await existingStudent.save();
+    }
+
+    return res.status(201).json({
+      message: "Attendance saved successfully",
+    });
+  } catch (error) {
+    console.error("Error saving attendance:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   getAttendanceStatus,
@@ -182,4 +211,5 @@ module.exports = {
   studentRegistration,
   getStudents,
   saveAttendance,
+  saveFeeStatus
 };
