@@ -19,7 +19,7 @@ const FeeStatus = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://attendify-backend-szi8.onrender.com/api/getStudents?batchName=${batchName}`
+          `http://localhost:5000/api/getStudents?batchName=${batchName}`
         );
         setStudents(response.data.students || []);
       } catch (error) {
@@ -39,7 +39,7 @@ const FeeStatus = () => {
   const updateFeeStatus = async (studentId) => {
     try {
       const response = await axios.put(
-        "https://attendify-backend-szi8.onrender.com/api/getFeeStatus",
+        "http://localhost:5000/api/getFeeStatus",
         {
           studentId,
         }
@@ -59,6 +59,18 @@ const FeeStatus = () => {
     } catch (error) {
       console.error("Error updating fee status:", error);
       toast.error("Failed to update fee status.");
+    }
+  };
+
+  const saveFeeStatus = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/saveFeePayStatus", {
+        students,
+      });
+      toast.success("Fee status saved successfully!");
+    } catch (error) {
+      console.error("Error saving fee status:", error);
+      toast.error("Failed to save fee status.");
     }
   };
 
@@ -107,6 +119,12 @@ const FeeStatus = () => {
               ))}
             </tbody>
           </table>
+          <button
+            className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 text-sm"
+            onClick={saveFeeStatus}
+          >
+            Save Fee Status
+          </button>
         </div>
       ) : (
         <p className="text-gray-600">No students registered in this batch.</p>

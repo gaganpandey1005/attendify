@@ -28,7 +28,7 @@ const AttendanceStatus = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://attendify-backend-szi8.onrender.com/api/getStudents?batchName=${batchName}`
+          `http://localhost:5000/api/getStudents?batchName=${batchName}`
         );
 
         const studentsData = response.data.students.map((student) => ({
@@ -61,7 +61,7 @@ const AttendanceStatus = () => {
   const updateAttendanceStatus = async (studentId, date) => {
     try {
       const response = await axios.put(
-        "https://attendify-backend-szi8.onrender.com/api/attendanceStatus",
+        "http://localhost:5000/api/attendanceStatus",
         { studentId, date }
       );
 
@@ -88,12 +88,9 @@ const AttendanceStatus = () => {
 
   const saveAttendance = async () => {
     try {
-      await axios.post(
-        "https://attendify-backend-szi8.onrender.com/api/saveAttendance",
-        {
-          students,
-        }
-      );
+      await axios.post("http://localhost:5000/api/saveAttendance", {
+        students,
+      });
       toast.success("Attendance saved successfully!");
     } catch (error) {
       console.error("Error saving attendance:", error);

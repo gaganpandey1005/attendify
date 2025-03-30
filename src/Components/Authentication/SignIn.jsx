@@ -33,14 +33,12 @@ const SignIn = () => {
 
     try {
       const response = await axios.post(
-        "https://attendify-backend-szi8.onrender.com/api/login",
+        "http://localhost:5000/api/login",
         formData,
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-
-      
 
       // Handle response dynamically based on backend response
       toast.success(response.data.message || "Logged in successfully!", {
@@ -65,7 +63,6 @@ const SignIn = () => {
       });
     }
   };
-
 
   return (
     <motion.div

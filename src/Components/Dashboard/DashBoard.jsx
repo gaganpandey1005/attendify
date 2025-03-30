@@ -21,14 +21,11 @@ const DashBoard = () => {
           return;
         }
 
-        const res = await axios.get(
-          "https://attendify-backend-szi8.onrender.com/api/getBatch",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get("http://localhost:5000/api/getBatch", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setBatches(res.data.batches);
       } catch (error) {
@@ -74,7 +71,9 @@ const DashBoard = () => {
                     Fee Status
                   </button>
                   <button
-                    onClick={() => navigate(`/Attendance?batchName=${batch.batchName}`)}
+                    onClick={() =>
+                      navigate(`/Attendance?batchName=${batch.batchName}`)
+                    }
                     className="bg-yellow-400 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto"
                   >
                     Take Attendance

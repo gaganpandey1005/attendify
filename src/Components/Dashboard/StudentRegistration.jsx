@@ -6,15 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 const StudentRegistrationTable = () => {
   const { batchName } = useParams(); // Get batch name from URL params
-  const batch=batchName;
+  const batch = batchName;
   const [formData, setFormData] = useState({
     name: "",
     contact: "",
     joiningDate: new Date().toISOString().split("T")[0], // Current date
-    batchName:batch
+    batchName: batch,
   });
-  
-  
 
   const [students, setStudents] = useState([]); // Store registered students
 
@@ -43,7 +41,7 @@ const StudentRegistrationTable = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        `https://attendify-backend-szi8.onrender.com/api/studentRegistration`,
+        `http://localhost:5000/api/studentRegistration`,
         formData,
 
         {
