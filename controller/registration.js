@@ -2,6 +2,7 @@ const Teacher = require("../model/teacherModel");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const verifyEmail = require("./verifyEmail");
 
 const registerTeacher = async (req, res) => {
   try {
@@ -40,11 +41,14 @@ const registerTeacher = async (req, res) => {
       tokenExpiry: Date.now() + 3600000, // Token valid for 1 hour
     });
 
+    // Send verification email
+    await sendVerificationEmail(email, token);
+
+    //verify email
+    // await verifyEmail()
     // Save to database
     await newTeacher.save();
 
-    // Send verification email
-    await sendVerificationEmail(email, token);
 
     // Respond to client
     res.status(201).json({
