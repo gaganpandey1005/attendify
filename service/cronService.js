@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const teacherModel = require("../model/teacherModel");
 
-cron.schedule("0 * * * *", async () => {
+cron.schedule("* * * * *", async () => {
   console.log("Cron job started: Checking and deleting unverified teachers...");
 
   try {
