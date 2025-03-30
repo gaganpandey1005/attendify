@@ -79,7 +79,7 @@ const StudentRegistrationTable = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-3xl mt-19 mx-auto  p-6 bg-white shadow-lg rounded-lg">
       <ToastContainer />
       <h2 className="text-2xl font-bold text-center mb-4">
         Student Registration for Batch: {batchName}
