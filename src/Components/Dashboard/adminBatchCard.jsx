@@ -25,7 +25,7 @@ const token=localStorage.getItem("token");
 
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/getTeacherBatches/${email}`
+          `https://attendify-backend-szi8.onrender.com/api/getTeacherBatches/${email}`
         );
         setBatches(res.data.batches);
       } catch (error) {

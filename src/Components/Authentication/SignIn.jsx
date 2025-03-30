@@ -2,37 +2,31 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify"; // Import react-toastify
+import { ToastContainer, toast } from "react-toastify";
 import { isAdminRestricted } from "../../helper";
 
 const SignIn = () => {
-
   const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  
-  
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear errors on change
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     let newErrors = {};
-
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setLoading(false);
       return;
     }
 
@@ -40,43 +34,34 @@ const SignIn = () => {
       const response = await axios.post(
         "https://attendify-backend-szi8.onrender.com/api/login",
         formData,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      // Handle response dynamically based on backend response
       toast.success(response.data.message || "Logged in successfully!", {
         position: "top-center",
         autoClose: 3000,
       });
 
-      // Store token (if authentication is token-based)
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
       }
-      localStorage.setItem("userEmail",formData.email);
-      
+      localStorage.setItem("userEmail", formData.email);
+
       if (
         formData.email === "admin@gmail.com" &&
         formData.password === "1234"
       ) {
         navigate("/admin");
-        localStorage.setItem("userEmail", formData.email);
-
         return;
       }
-      // Redirect after successful login
       navigate("/dashboard");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
         "Something went wrong. Please try again later.";
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error(errorMessage, { position: "top-center", autoClose: 3000 });
     }
+    setLoading(false);
   };
 
   return (
@@ -134,17 +119,18 @@ const SignIn = () => {
           )}
         </div>
 
-        {errors.general && (
-          <p className="text-red-500 text-sm">{errors.general}</p>
-        )}
-
         <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-blue-500 text-white p-2 rounded-lg mt-4 shadow-md hover:bg-blue-600 transition-all"
+          whileHover={!loading ? { scale: 1.05 } : {}}
+          whileTap={!loading ? { scale: 0.95 } : {}}
+          className="bg-blue-500 text-white p-2 rounded-lg mt-4 shadow-md hover:bg-blue-600 transition-all flex items-center justify-center"
           type="submit"
+          disabled={loading}
         >
-          Sign In
+          {loading ? (
+            <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            "Sign In"
+          )}
         </motion.button>
 
         <div className="flex">

@@ -24,7 +24,7 @@ const AdminDashBoard =  () => {
     const fetchData=async()=>{
         try{
           const res = await axios.get(
-            "http://localhost:5000/api/getAllDetails"
+            "https://attendify-backend-szi8.onrender.com/api/getAllDetails"
           );
           setdata({
             batches:res.data.batches,

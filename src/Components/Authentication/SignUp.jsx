@@ -14,15 +14,15 @@ const SignUp = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear errors on change
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     let newErrors = {};
 
     if (!formData.name) newErrors.name = "Name is required";
@@ -34,30 +34,26 @@ const SignUp = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await axios.post(
         "https://attendify-backend-szi8.onrender.com/api/register",
-
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log("formData", formData);
 
-      console.log("Response:", response);
       toast.success(response.data.message, {
         position: "top-center",
         autoClose: 3000,
       });
       setFormData({ name: "", email: "", password: "" });
     } catch (error) {
-      console.error(
-        "Error:",
-        error.response ? error.response.data : "No response from server"
-      );
       toast.error("Something went wrong", {
         position: "top-center",
         autoClose: 3000,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,8 +112,8 @@ const SignUp = () => {
         </div>
 
         <div className="flex flex-col">
-          <label  className="text-gray-600 font-medium">Password</label>
-          <motion.input placeholder="Password should be of 4 character only"
+          <label className="text-gray-600 font-medium">Password</label>
+          <motion.input
             whileFocus={{ scale: 1.05 }}
             className="border p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 transition-all outline-none"
             type="password"
@@ -134,11 +130,17 @@ const SignUp = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="bg-blue-500 text-white p-2 rounded-lg mt-4 shadow-md hover:bg-blue-600 transition-all"
+          className="bg-blue-500 text-white p-2 rounded-lg mt-4 shadow-md hover:bg-blue-600 transition-all flex items-center justify-center"
           type="submit"
+          disabled={loading}
         >
-          Sign Up
+          {loading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+          ) : (
+            "Sign Up"
+          )}
         </motion.button>
+
         <div className="flex">
           <span>Already have an account?</span>
           <span
