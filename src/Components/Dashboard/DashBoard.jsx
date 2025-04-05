@@ -29,6 +29,8 @@ const DashBoard = () => {
             },
           }
         );
+        console.log(res.data);
+        
 
         setBatches(res.data.batches);
       } catch (error) {
@@ -75,11 +77,15 @@ const DashBoard = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(`/Attendance?batchName=${batch.batchName}`)
+                      navigate(`/Attendance?batchName=${batch.batchName}`,{
+                        state:{id:batch.id}
+                        
+                      })
                     }
                     className="bg-yellow-400 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto"
                   >
-                    Take Attendance
+                    Take Attendance 
+                    
                   </button>
                   <button
                     onClick={() =>
