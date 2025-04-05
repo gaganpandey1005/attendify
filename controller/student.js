@@ -2,44 +2,46 @@ const Batch = require("../model/batchModel");
 const Student = require("../model/studentModel");
 const jwt = require("jsonwebtoken");
 
+// * Student Registration Controller
 const studentRegistration = async (req, res) => {
   try {
     const { name, joiningDate, contact, batchName } = req.body;
 
-    // ✅ Correct token extraction
+    // * ✅ Extract token from Authorization header
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
+      // ! Token missing
       return res.status(401).json({ message: "No token provided" });
     }
 
-    // ✅ Verify token
+    // * ✅ Verify JWT token
     const decoded = jwt.verify(token, process.env.secret_key);
     const teacher = decoded.id;
 
     if (!teacher) {
+      // ! Teacher not present in token
       return res.status(400).json({ message: "No Teacher exists" });
     }
 
-    // console.log("Incoming data", req.body);
-
-    // ✅ Validate required fields
+    // * ✅ Required field validation
     if (!name || !joiningDate || !contact || !batchName) {
       return res.status(400).json({ message: "All information required" });
     }
 
-    // ✅ Find the batch
+    // * ✅ Find batch by name
     const batch = await Batch.findOne({ batchName });
 
     if (!batch) {
+      // ! Batch does not exist
       return res.status(404).json({ message: "Batch not found" });
     }
 
-    // ✅ Ensure `students` array exists
+    // * ✅ Ensure student array exists
     if (!Array.isArray(batch.student)) {
       batch.student = [];
     }
 
-    // ✅ Create new student
+    // * ✅ Create new student
     const newStudent = new Student({
       name,
       joiningDate,
@@ -50,7 +52,7 @@ const studentRegistration = async (req, res) => {
 
     await newStudent.save();
 
-    // ✅ Add student to batch
+    // * ✅ Add student to batch and save
     batch.student.push(newStudent._id);
     await batch.save();
 
@@ -60,17 +62,20 @@ const studentRegistration = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in student registration:", error);
+    // ! Internal Server Error
     res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
+// * Get all students in a batch
 const getStudents = async (req, res) => {
   try {
     const { batchName } = req.query;
 
     if (!batchName) {
+      // ! Missing batch name in query
       return res.status(400).json({ message: "Batch name is required" });
     }
 
@@ -83,6 +88,7 @@ const getStudents = async (req, res) => {
     res.status(200).json({
       success: true,
       batchName: batch.batchName,
+      batchId: batch._id,
       students: batch.student || [],
       message:
         batch.student.length === 0
@@ -91,21 +97,23 @@ const getStudents = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in fetching students:", error);
-    res.status(500).json({
-      message: "Internal Server Error",
-      error: error.message,
-    });
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
+// * Toggle fee payment status
 const getFeeStatus = async (req, res) => {
-  const { studentId, feePayStatus } = req.body;
+  const { studentId } = req.body;
 
   try {
     const student = await Student.findById(studentId);
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
+
+    // * Toggle fee status and update date
     student.feePayStatus = !student.feePayStatus;
     student.feePayDate = Date.now();
     await student.save();
@@ -115,13 +123,14 @@ const getFeeStatus = async (req, res) => {
       feePayStatus: student.feePayStatus,
     });
   } catch (err) {
+    // ! Error updating fee
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
+// * Toggle attendance status for a specific date
 const getAttendanceStatus = async (req, res) => {
   const { studentId, date } = req.body;
-  // console.log("Incoming request:", req.body);
 
   try {
     const student = await Student.findById(studentId);
@@ -133,10 +142,7 @@ const getAttendanceStatus = async (req, res) => {
     const newStatus = !currentStatus;
 
     student.attendance.set(date, newStatus);
-
     await student.save();
-
-    // console.log("Updated student:", student);
 
     return res.status(201).json({
       message: "Student attendance status updated",
@@ -148,21 +154,19 @@ const getAttendanceStatus = async (req, res) => {
   }
 };
 
-// ✅ Save Attendance for a Batch
+// * Save entire attendance data (bulk update)
 const saveAttendance = async (req, res) => {
   try {
     const { students } = req.body;
-// console.log(students);
 
     if (!students || !Array.isArray(students) || students.length === 0) {
+      // ! Invalid or empty data
       return res.status(400).json({ message: "Invalid attendance data" });
     }
 
     for (const student of students) {
       const existingStudent = await Student.findById(student._id);
-      if (!existingStudent) {
-        continue;
-      }
+      if (!existingStudent) continue;
 
       existingStudent.attendance = student.attendance;
       await existingStudent.save();
@@ -176,6 +180,8 @@ const saveAttendance = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// * Save fee status for all students (bulk)
 const saveFeeStatus = async (req, res) => {
   try {
     const { students } = req.body;
@@ -186,15 +192,10 @@ const saveFeeStatus = async (req, res) => {
 
     for (const student of students) {
       const existingStudent = await Student.findById(student._id);
-      if (!existingStudent) {
-        continue;
-      }
-      // console.log("student",students);
-      
-      
+      if (!existingStudent) continue;
 
       existingStudent.feePayStatus = student.feePayStatus;
-      existingStudent.feePayDate=student.feePayDate;
+      existingStudent.feePayDate = student.feePayDate;
       await existingStudent.save();
     }
 
@@ -207,11 +208,63 @@ const saveFeeStatus = async (req, res) => {
   }
 };
 
+// * Delete student by ID and remove from batch
+const deleteStudents = async (req, res) => {
+  const { id } = req.params;
+  const { batchName } = req.body;
+
+  try {
+    const deletedStudent = await Student.findByIdAndDelete(id);
+
+    if (!deletedStudent) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // * Remove student from batch's student list
+    const updateBatch = await Batch.findOneAndUpdate(
+      { batchName },
+      { $pull: { student: id } }, // ✅ Pull student ID from array
+      { new: true }
+    );
+
+    console.log(updateBatch);
+
+    res.status(200).json({ message: "Student deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+const updateStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, contact } = req.body;
+
+    const updatedStudent = await Student.findByIdAndUpdate(
+      id,
+      { name, contact },
+      { new: true } // return the updated document
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.status(200).json(updatedStudent);
+  } catch (error) {
+    console.error("Error updating student:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// @ Export all controller functions
 module.exports = {
   getAttendanceStatus,
   getFeeStatus,
   studentRegistration,
   getStudents,
   saveAttendance,
-  saveFeeStatus
+  saveFeeStatus,
+  deleteStudents,
+  updateStudent
 };
