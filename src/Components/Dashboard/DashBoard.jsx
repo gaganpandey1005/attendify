@@ -29,7 +29,8 @@ const DashBoard = () => {
             },
           }
         );
-        console.log(res.data);
+        
+
         
 
         setBatches(res.data.batches);
