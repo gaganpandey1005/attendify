@@ -21,14 +21,14 @@ const DashBoard = () => {
           return;
         }
 
-        const res = await axios.get(
-          "https://attendify-backend-szi8.onrender.com/api/getBatch",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get("http://localhost:5000/api/getBatch", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        
+        
         
 
         
@@ -45,7 +45,7 @@ const DashBoard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen">
       <DashBoardHeader />
 
       {loading ? (
@@ -79,12 +79,14 @@ const DashBoard = () => {
                   <button
                     onClick={() =>
                       navigate(`/Attendance?batchName=${batch.batchName}`,{
-                        state:{id:batch.id}
+                        state:{id:batch._id}
                         
                       })
                     }
                     className="bg-yellow-400 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto"
                   >
+                    
+
                     Take Attendance 
                     
                   </button>

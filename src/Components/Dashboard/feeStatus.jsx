@@ -80,7 +80,7 @@ const FeeStatus = () => {
           })),
         }
       );
-      console.log(students);
+      
       
       toast.success("Fee status saved successfully!");
     } catch (error) {
