@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const teacherModel = require("../model/teacherModel");
 
 cron.schedule("* * * * *", async () => {
-  console.log("Cron job started: Checking and deleting unverified teachers...");
+  
 
   try {
     
@@ -14,12 +14,10 @@ cron.schedule("* * * * *", async () => {
       
     });
 
-    // console.log(
-    //   `Found ${teachersToDelete} unverified teachers for deletion.`
-    // );
+    
 
     if (teachersToDelete.length === 0) {
-      console.log("No unverified teachers found for deletion.");
+      
       return;
     }
 
@@ -29,10 +27,10 @@ cron.schedule("* * * * *", async () => {
       
     });
 
-    console.log(`Deleted ${result.deletedCount} unverified teachers.`);
+    
   } catch (error) {
     console.error("Error deleting unverified teachers:", error);
   }
 
-  console.log("Cron job completed.");
+  
 });

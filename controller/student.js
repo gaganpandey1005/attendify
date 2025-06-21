@@ -211,7 +211,7 @@ const saveFeeStatus = async (req, res) => {
 // * Delete student by ID and remove from batch
 const deleteStudents = async (req, res) => {
   const { id } = req.params;
-  const { batchName } = req.body;
+  const { batchId} = req.body;
 
   try {
     const deletedStudent = await Student.findByIdAndDelete(id);
@@ -222,12 +222,12 @@ const deleteStudents = async (req, res) => {
 
     // * Remove student from batch's student list
     const updateBatch = await Batch.findOneAndUpdate(
-      { batchName },
+      { _id:batchId.id },
       { $pull: { student: id } }, // ✅ Pull student ID from array
       { new: true }
     );
 
-    console.log(updateBatch);
+    
 
     res.status(200).json({ message: "Student deleted successfully" });
   } catch (error) {

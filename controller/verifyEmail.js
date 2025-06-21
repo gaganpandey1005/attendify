@@ -3,7 +3,7 @@ const Teacher = require("../model/teacherModel");
 const verifyEmail = async (req, res) => {
   try {
     const { token } = req.params;
-// console.log("Token",token);
+
 
     if (!token) {
       return res.status(400).json({ message: "Missing or Invalid Token" });
@@ -13,7 +13,7 @@ const verifyEmail = async (req, res) => {
         token,
       tokenExpiry: { $gt: Date.now() },
     });
-// console.log("verification token",user);
+
 
     if (!user) {
       return res.status(404).json({ message: "Token Expired or Invalid" });

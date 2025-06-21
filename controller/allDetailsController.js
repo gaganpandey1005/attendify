@@ -21,7 +21,7 @@ const getAllDetails = async (req, res) => {
 
  const getTeacherBatches = async (req, res) => {
    const { email } = req.params;
-console.log(email);
+
 
    try {
      // Find teacher by email
