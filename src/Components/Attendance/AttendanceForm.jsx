@@ -20,8 +20,7 @@ const AttendanceStatus = () => {
   const queryParams = new URLSearchParams(location.search);
   const batchName = queryParams.get("batchName") || "";
   const batchId = location.state || null;
-  
-  
+
   const getCurrentDate = () => {
     const today = new Date();
     return today.toISOString().split("T")[0];
@@ -109,19 +108,16 @@ const AttendanceStatus = () => {
   };
 
   const handleDelete = async (studentId, batchName) => {
-    
-    
     if (isAdminRestricted()) return;
     try {
-      
       await axios.delete(
-        `http://localhost:5000/api/deleteStudent/${studentId}`,
+        `https://attendify-backend-szi8.onrender.com//api/deleteStudent/${studentId}`,
         {
           data: { batchId },
         }
       );
       toast.success("Student Deleted");
-      
+
       window.location.reload();
     } catch (err) {
       console.error("Error deleting student:", err);
@@ -162,7 +158,7 @@ const AttendanceStatus = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/updateStudent/${editingStudent}`,
+        `https://attendify-backend-szi8.onrender.com/api/updateStudent/${editingStudent}`,
         {
           name: formData.name,
           contact: formData.contact,

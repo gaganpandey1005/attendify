@@ -25,6 +25,8 @@ const AdminDashBoard = () => {
         const res = await axios.get(
           "https://attendify-backend-szi8.onrender.com/api/getAllDetails"
         );
+        console.log("response", res);
+        
         setdata({
           batches: res.data.batches,
           teachers: res.data.teachers,
