@@ -12,7 +12,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'My Vite PWA App',
+        name: 'Attendify App',
         short_name: 'PWA App',
         description: 'A React + Vite PWA example',
         theme_color: '#ffffff',

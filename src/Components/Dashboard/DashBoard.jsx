@@ -17,6 +17,7 @@ const DashBoard = () => {
     const fetchBatches = async () => {
       try {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        
         if (!token) {
           toast.error("Unauthorized: No token found");
           return;
@@ -34,10 +35,13 @@ const DashBoard = () => {
         
         
         
+        
 
         
 
         setBatches(res.data.batches);
+        
+        
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to fetch batches");
       } finally {
