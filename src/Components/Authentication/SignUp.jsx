@@ -4,8 +4,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../../Context/AuthContext";
 
 const SignUp = () => {
+  const {login,setLogin}=useAuth();
+  setLogin(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",

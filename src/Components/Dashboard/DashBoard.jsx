@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const DashBoard = () => {
+  
   const navigate = useNavigate();
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ const DashBoard = () => {
   useEffect(() => {
     const fetchBatches = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
         if (!token) {
           toast.error("Unauthorized: No token found");
           return;

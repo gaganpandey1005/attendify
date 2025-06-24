@@ -21,7 +21,7 @@ const BatchCard = () => {
         setLoading(false);
         return;
       }
-const token=localStorage.getItem("token");
+const token=localStorage.getItem("token") || sessionStorage.getItem("token");
 
       try {
         const res = await axios.get(

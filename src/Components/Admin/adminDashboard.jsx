@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const AdminDashBoard = () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
   if (!token) {
     alert("user is not authenticated please login again");
@@ -25,7 +25,7 @@ const AdminDashBoard = () => {
         const res = await axios.get(
           "https://attendify-backend-szi8.onrender.com/api/getAllDetails"
         );
-        console.log("response", res);
+        
         
         setdata({
           batches: res.data.batches,
@@ -41,17 +41,17 @@ const AdminDashBoard = () => {
 
   return (
     <>
-      <div className="mt-15 bg-gray-100 p-6">
+      <div className="mt-15  p-6">
         <div className="flex flex-wrap gap-8 justify-start   mb-8">
-          <div className="bg-gray-200 shadow-blue-200 shadow-lg rounded-3xl p-2 w-26  h-18 text-center transition-transform transform hover:scale-105">
+          <div className=" shadow-blue-200 shadow-lg rounded-3xl p-2 w-26  h-18 text-center transition-transform transform hover:scale-105">
             <h1 className="text-xl font-semibold text-gray-800">Batches</h1>
             <p className="font-bold text-blue-600">{data.batches.length} </p>
           </div>
-          <div className="bg-gray-200 shadow-blue-200 shadow-lg rounded-3xl p-2 w-26 h-18 text-center transition-transform transform hover:scale-105">
+          <div className=" shadow-blue-200 shadow-lg rounded-3xl p-2 w-26 h-18 text-center transition-transform transform hover:scale-105">
             <h1 className="text-xl font-semibold text-gray-800">Students</h1>
             <p className="font-bold text-blue-600">{data.students.length}</p>
           </div>
-          <div className="bg-gray-200 shadow-blue-200 shadow-lg rounded-3xl p-2 w-26 h-18 text-center transition-transform transform hover:scale-105">
+          <div className=" shadow-blue-200 shadow-lg rounded-3xl p-2 w-26 h-18 text-center transition-transform transform hover:scale-105">
             <h1 className="text-xl font-semibold text-gray-800">Teachers</h1>
             <p className="font-bold text-blue-600">{data.teachers.length}</p>
           </div>

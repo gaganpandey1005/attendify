@@ -4,13 +4,18 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { isAdminRestricted } from "../../helper";
-
+import { useAuth } from "../../Context/AuthContext";
+import { useLocation } from "react-router-dom";
 const SignIn = () => {
+  
+  
+  const {login, setLogin}= useAuth();
+  
   const navigate = useNavigate();
+  const [rememberMe,setRememberMe]=useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: "" });
@@ -31,6 +36,16 @@ const SignIn = () => {
     }
 
     try {
+    
+      localStorage.setItem("userEmail", formData.email);
+      if (
+        formData.email === "admin@gmail.com" &&
+        formData.password === "1234"
+      ) {
+        setLogin(true)
+        navigate("/admin");
+        return;
+      }
       const response = await axios.post(
         "https://attendify-backend-szi8.onrender.com/api/login",
         formData,
@@ -43,18 +58,12 @@ const SignIn = () => {
       });
 
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      }
-      localStorage.setItem("userEmail", formData.email);
-
-      if (
-        formData.email === "admin@gmail.com" &&
-        formData.password === "1234"
-      ) {
-        navigate("/admin");
-        return;
+        rememberMe && localStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("token", response.data.token);
+        setLogin(true);
       }
       navigate("/dashboard");
+      
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
@@ -118,13 +127,21 @@ const SignIn = () => {
             <p className="text-red-500 text-sm">{errors.password}</p>
           )}
         </div>
-
+        <div className="flex gap-1">
+          <input
+            type="checkbox"
+            className="mt-1"
+            onClick={() => setRememberMe(!rememberMe)}
+          />
+          <p>Remember me</p>
+        </div>
         <motion.button
           whileHover={!loading ? { scale: 1.05 } : {}}
           whileTap={!loading ? { scale: 0.95 } : {}}
           className="bg-blue-500 text-white p-2 rounded-lg mt-4 shadow-md hover:bg-blue-600 transition-all flex items-center justify-center"
           type="submit"
           disabled={loading}
+          
         >
           {loading ? (
             <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -146,6 +163,7 @@ const SignIn = () => {
       <ToastContainer />
     </motion.div>
   );
+  
 };
 
 export default SignIn;

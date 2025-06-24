@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Avatar, { genConfig } from "react-nice-avatar";
 import axios from "axios";
@@ -8,6 +8,15 @@ import { ClipLoader } from "react-spinners";
 const TeacherNameCards = ({ teachers }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  // Precompute configs using useMemo to avoid regenerating on each render
+  const configs = useMemo(() => {
+    const map = new Map();
+    teachers.forEach((teacher) => {
+      map.set(teacher.email, genConfig({ seed: teacher.email }));
+    });
+    return map;
+  }, [teachers]);
 
   const handleClick = async (email) => {
     setLoading(true);
@@ -24,10 +33,11 @@ const TeacherNameCards = ({ teachers }) => {
   };
 
   return (
-    <div className="flex bg-gray-100 justify-start">
+    <div className="flex justify-start">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         {teachers.map((teacher, index) => {
-          const config = genConfig({ seed: teacher.email });
+          const config = configs.get(teacher.email);
+
           return (
             <motion.div
               key={index}

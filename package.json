@@ -7,12 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "start":"vite",
+    "start": "vite",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.2.3",
+    "@dicebear/core": "^9.2.3",
     "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.7.9",
+    "boring-avatars": "^1.11.2",
     "framer-motion": "^12.4.7",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0",

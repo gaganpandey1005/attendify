@@ -1,7 +1,6 @@
-import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import SignUp from "./Components/Authentication/SignUp";
-
 import SignIn from "./Components/Authentication/SignIn";
 import Dashboard from "./Components/Dashboard/DashBoard";
 import AttendanceForm from "./Components/Attendance/AttendanceForm";
@@ -11,30 +10,83 @@ import FeeStatus from "./Components/Dashboard/feeStatus";
 import AdminDashBoard from "./Components/Admin/adminDashboard";
 import BatchCard from "./Components/Admin/adminBatchCard";
 import Header from "./Components/Header";
-
+import PrivateRoute from "./Components/Authentication/PrivateRoute"; 
+import { useAuth } from "./Context/AuthContext";
+import { useLocation } from "react-router-dom";
 function App() {
-  return (
-    <>
-      <div className="background">
-        <Header />
-        <Routes>
-          <Route path="/" element={<SignUp />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/Attendance" element={<AttendanceForm />} />
-          <Route
-            path="/registerStudent/:batchName"
-            element={<StudentRegistrationForm />}
-          />
-          <Route path="/getStudent" element={<GetStudentTable />} />
-          <Route path="/feeStatus" element={<FeeStatus />} />
-          <Route path="/admin" element={<AdminDashBoard />} />
-          <Route path="/getTeacherBatches" element={<BatchCard />} />
-        </Routes>
-      </div>
-    </>
-  );
+ const {login,setLogin}=useAuth();
+ const location=useLocation()
+ 
+ return (
+   <>
+     {login &&
+       location.pathname !== "/signin" &&
+       location.pathname !== "/signup" && <Header />}
+     <Routes>
+       <Route path="/" element={<SignUp />} />
+       <Route path="/signup" element={<SignUp />} />
+       <Route path="/signin" element={<SignIn />} />
+
+       {/* ✅ Protected routes */}
+       <Route
+         path="/dashboard"
+         element={
+           <PrivateRoute>
+             <Dashboard />
+           </PrivateRoute>
+         }
+       />
+       <Route
+         path="/Attendance"
+         element={
+           <PrivateRoute>
+             <AttendanceForm />
+           </PrivateRoute>
+         }
+       />
+       <Route
+         path="/registerStudent/:batchName"
+         element={
+           <PrivateRoute>
+             <StudentRegistrationForm />
+           </PrivateRoute>
+         }
+       />
+       <Route
+         path="/getStudent"
+         element={
+           <PrivateRoute>
+             <GetStudentTable />
+           </PrivateRoute>
+         }
+       />
+       <Route
+         path="/feeStatus"
+         element={
+           <PrivateRoute>
+             <FeeStatus />
+           </PrivateRoute>
+         }
+       />
+       <Route
+         path="/admin"
+         element={
+           <PrivateRoute>
+             <AdminDashBoard />
+           </PrivateRoute>
+         }
+       />
+       <Route
+         path="/getTeacherBatches"
+         element={
+           <PrivateRoute>
+             <BatchCard />
+           </PrivateRoute>
+         }
+       />
+     </Routes>
+   </>
+ );
 }
 
 export default App;

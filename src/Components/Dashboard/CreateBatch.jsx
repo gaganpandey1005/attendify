@@ -16,7 +16,7 @@ export default function BatchForm({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("token"); // Get JWT token
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token"); // Get JWT token
 
     if (!token) {
       toast.error("User is not authenticated. Please log in again.", {

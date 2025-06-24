@@ -38,7 +38,7 @@ const StudentRegistrationTable = () => {
     const studentData = { ...formData, batchName: batch };
 
     
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     try {
       const response = await axios.post(
         `https://attendify-backend-szi8.onrender.com/api/studentRegistration`,

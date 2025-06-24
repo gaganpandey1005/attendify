@@ -111,14 +111,14 @@ const AttendanceStatus = () => {
     if (isAdminRestricted()) return;
     try {
       await axios.delete(
-        `https://attendify-backend-szi8.onrender.com//api/deleteStudent/${studentId}`,
+        `https://attendify-backend-szi8.onrender.com/api/deleteStudent/${studentId}`,
         {
           data: { batchId },
         }
       );
       toast.success("Student Deleted");
 
-      window.location.reload();
+      setStudents((prev)=>prev.filter((s)=>s._id!=studentId))
     } catch (err) {
       console.error("Error deleting student:", err);
       console.log(err);
